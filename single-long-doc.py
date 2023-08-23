@@ -6,10 +6,10 @@ from langchain.embeddings import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 
-load_dotenv('.env')
+OpenAI.api_key = os.getenv('OPENAI_API_KEY')
 
 # load the document as before
-loader = PyPDFLoader('./docs/RachelGreenCV.pdf')
+loader = PyPDFLoader(input('Provide full file path: '))
 documents = loader.load()
 
 # we split the data into chunks of 1,000 characters, with an overlap
@@ -33,11 +33,21 @@ vectordb.persist()
 # data from the vectorstore, based on the semantic similiarity between
 # the prompt and the stored information
 qa_chain = RetrievalQA.from_chain_type(
-    llm=OpenAI(),
+    llm=OpenAI(model_name="gpt-4"),
     retriever=vectordb.as_retriever(search_kwargs={'k': 6}),
     return_source_documents=True
 )
 
 # we can now exectute queries againse our Q&A chain
-result = qa_chain({'query': 'Who is the CV about?'})
-print(result['result'])
+while True:
+    print("Choose an option:")
+    choice = input("1. Query document \n 2. Exit")
+    if choice == "1":
+        query = input("Enter your query")
+        result = qa_chain({'query': f'{query}'})
+        print(result['result'])
+    elif choice == "2":
+        break
+    else:
+        print("Invalid choice.")
+        continue

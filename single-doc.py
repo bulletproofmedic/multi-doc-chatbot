@@ -5,10 +5,20 @@ from langchain.document_loaders import PyPDFLoader
 
 load_dotenv('.env')
 
-pdf_loader = PyPDFLoader('./docs/RachelGreenCV.pdf')
+pdf_loader = PyPDFLoader(input('Provide full file path:'))
 documents = pdf_loader.load()
 
 chain = load_qa_chain(llm=OpenAI())
-query = 'Who is the CV about?'
-response = chain.run(input_documents=documents, question=query)
-print(response)
+
+while True:
+    print("Choose an option:")
+    choice = input("1. Query document \n 2. Exit")
+        if choice == "1":
+            query = input("Enter your query")
+            response = chain.run(input_documents=documents, question=query)
+            print(response)
+        elif choice == "2":
+            break
+        else:
+            print("Invalid choice.")
+            continue

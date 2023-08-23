@@ -67,9 +67,7 @@ dir_path = "C:/AI/Web_App"
 
 doc_names = []
 documents = []
-yt_vids = ["
-
-]
+yt_vids = []
 
 urls = [
     "https://www.innovaitivesolutions.ca",
